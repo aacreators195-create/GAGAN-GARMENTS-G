@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gagan Garments | Premium Wear Sangaria</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+    <style>
+        :root {
+            --primary-black: #0F0F0F;
+            --soft-white: #FAFAFA;
+            --charcoal: #2B2B2B;
+            --muted-gold: #C6A86D;
+            --light-grey: #E5E5E5;
+            --transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background-color: var(--soft-white); 
+            font-family: 'Montserrat', sans-serif; 
+            color: var(--primary-black);
+            overflow-x: hidden;
+        }
+
+        /* --- UI HELPERS --- */
+        .no-cod-badge {
+            background: #ff4444;
+            color: white;
+            font-size: 0.7rem;
+            padding: 4px 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            padding: 30px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: var(--transition);
+        }
+        nav.scrolled {
+            background: rgba(15, 15, 15, 0.98);
+            padding: 15px 5%;
+            backdrop-filter: blur(10px);
+        }
+        nav.scrolled .logo, nav.scrolled .nav-trigger { color: white; }
+
+        .logo { 
+            font-family: 'Syncopate', sans-serif; 
+            font-weight: 700; 
+            font-size: 1.5rem; 
+            letter-spacing: -1px;
+            color: var(--primary-black);
+            text-decoration: none;
+        }
+
+        .nav-trigger {
+            cursor: pointer;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
+                        url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070&auto=format&fit=crop') center/cover;
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-content h1 {
+            font-family: 'Syncopate', sans-serif;
+            font-size: clamp(2.5rem, 8vw, 6rem);
+            line-height: 1;
+            margin-bottom: 20px;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .btn {
+            padding: 18px 40px;
+            text-decoration: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+            transition: var(--transition);
+            border: 1px solid white;
+        }
+        .btn-gold { background: var(--muted-gold); border-color: var(--muted-gold); color: white; }
+        .btn-gold:hover { background: transparent; color: white; }
+        .btn-outline:hover { background: white; color: var(--primary-black); }
+
+        /* --- ANIMATED CATEGORY MENU --- */
+        #categoryMenu {
+            position: fixed;
+            inset: 0;
+            background: var(--primary-black);
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 50px;
+            width: 80%;
+            max-width: 1200px;
+        }
+
+        .cat-item {
+            text-align: center;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        /* 3D Visual Simulation */
+        .cat-visual {
+            width: 150px;
+            height: 200px;
+            margin: 0 auto 30px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: var(--transition);
+        }
+        
+        /* Specific Category Animations */
+        .rotate-360 { animation: rotate360 10s linear infinite; }
+        .float-soft { animation: floatSoft 4s ease-in-out infinite; }
+        .depth-hover { animation: depthHover 5s ease-in-out infinite; }
+
+        @keyframes rotate360 { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
+        @keyframes floatSoft { 0%, 100% { transform: translateY(0) rotateX(10deg); } 50% { transform: translateY(-20px) rotateX(-10deg); } }
+        @keyframes depthHover { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1) translateZ(50px); } }
+
+        .cat-visual img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5)); }
+        .cat-item h3 { font-family: 'Syncopate'; font-size: 1.2rem; letter-spacing: 3px; }
+
+        /* --- PRODUCT SYSTEM --- */
+        .products { padding: 100px 5%; }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .product-card {
+            background: white;
+            transition: var(--transition);
+            border-bottom: 2px solid transparent;
+        }
+
+        .product-card:hover { transform: translateY(-10px); border-color: var(--muted-gold); }
+
+        .product-img {
+            height: 450px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .product-img img { width: 100%; height: 100%; object-fit: cover; transition: 0.8s; }
+        .product-card:hover .product-img img { transform: scale(1.1); }
+
+        .product-info { padding: 25px 0; }
+        .product-info h4 { font-size: 1.1rem; margin-bottom: 10px; text-transform: uppercase; }
+        .price { font-weight: 700; color: var(--muted-gold); font-size: 1.2rem; }
+
+        /* --- REVIEWS --- */
+        .reviews { padding: 100px 5%; background: var(--primary-black); color: white; }
+        .review-slider { display: flex; gap: 30px; overflow-x: auto; padding-bottom: 30px; }
+        .review-card {
+            min-width: 350px;
+            background: var(--charcoal);
+            padding: 40px;
+            border-left: 4px solid var(--muted-gold);
+        }
+        .stars { color: var(--muted-gold); margin-bottom: 15px; }
+
+        /* --- WHATSAPP FLOATING --- */
+        .wa-float {
+            position: fixed;
+            bottom: 30px; right: 30px;
+            background: #25D366;
+            color: white;
+            width: 65px; height: 65px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
+            z-index: 1000;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        .wa-float:hover { transform: scale(1.1) rotate(15deg); }
+
+        /* --- FOOTER & CONTACT --- */
+        footer { background: var(--primary-black); color: white; padding: 80px 5% 40px; }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 60px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 60px;
+        }
+        .footer-logo { font-family: 'Syncopate'; font-size: 1.5rem; margin-bottom: 20px; display: block; }
+        
+        @media (max-width: 768px) {
+            .hero-cta { flex-direction: column; }
+            .menu-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="categoryMenu">
+        <div class="nav-trigger" onclick="toggleMenu()" style="position: absolute; top: 40px; right: 5%; color: white;">
+            Close <i class="fas fa-times"></i>
+        </div>
+        <div class="menu-grid">
+            <div class="cat-item">
+                <div class="cat-visual rotate-360">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2503/2503380.png" alt="T-Shirts">
+                </div>
+                <h3>T-SHIRTS</h3>
+            </div>
+            <div class="cat-item">
+                <div class="cat-visual float-soft">
+                    <img src="https://cdn-icons-png.flaticon.com/512/7527/7527503.png" alt="Hoodies">
+                </div>
+                <h3>HOODIES</h3>
+            </div>
+            <div class="cat-item">
+                <div class="cat-visual depth-hover">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3531/3531744.png" alt="Jeans">
+                </div>
+                <h3>PREMIUM JEANS</h3>
+            </div>
+        </div>
+    </div>
+
+    <nav id="navbar">
+        <a href="#" class="logo">GAGAN GARMENTS</a>
+        <div class="nav-trigger" onclick="toggleMenu()">
+            Shop <i class="fas fa-bars-staggered"></i>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content" data-aos="zoom-out">
+            <p style="letter-spacing: 8px; text-transform: uppercase; margin-bottom: 10px;">Sangaria's Finest</p>
+            <h1>GAGAN<br>GARMENTS</h1>
+            <p style="font-weight: 300; opacity: 0.8;">Premium Wear for Everyday Style</p>
+            <div class="hero-cta">
+                <a href="#shop" class="btn btn-gold">Explore Shop</a>
+                <a href="https://wa.me/917375093262" class="btn btn-outline">WhatsApp Order</a>
+            </div>
+        </div>
+    </section>
+
+    <section style="padding: 40px 5%; display: flex; justify-content: space-around; flex-wrap: wrap; background: #fff; gap: 20px;">
+        <div style="text-align: center;"><i class="fas fa-award" style="color: var(--muted-gold);"></i> Trusted Local Store</div>
+        <div style="text-align: center;"><i class="fas fa-users" style="color: var(--muted-gold);"></i> 1000+ Happy Customers</div>
+        <div style="text-align: center;"><i class="fas fa-shield-halved" style="color: var(--muted-gold);"></i> High Quality Guaranteed</div>
+    </section>
+
+    <section class="products" id="shop">
+        <div class="section-title" style="margin-bottom: 60px;">
+            <span class="no-cod-badge">Strictly No COD Available</span>
+            <h2 style="font-family: 'Syncopate';">NEW ARRIVALS</h2>
+        </div>
+        
+        <div class="product-grid">
+            <div class="product-card" data-aos="fade-up">
+                <div class="product-img">
+                    <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=800&auto=format&fit=crop" alt="Polo">
+                </div>
+                <div class="product-info">
+                    <h4>Premium Piqué Polo</h4>
+                    <p class="price">₹1,299</p>
+                    <a href="https://wa.me/917375093262?text=I'd like to order the Premium Polo" class="btn btn-gold" style="width: 100%; display: block; text-align: center; margin-top: 15px; padding: 12px;">Order on WhatsApp</a>
+                </div>
+            </div>
+
+            <div class="product-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="product-img">
+                    <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=800&auto=format&fit=crop" alt="Hoodie">
+                </div>
+                <div class="product-info">
+                    <h4>Essential Charcoal Hoodie</h4>
+                    <p class="price">₹2,499</p>
+                    <a href="https://wa.me/917375093262?text=I'd like to order the Essential Hoodie" class="btn btn-gold" style="width: 100%; display: block; text-align: center; margin-top: 15px; padding: 12px;">Order on WhatsApp</a>
+                </div>
+            </div>
+
+            <div class="product-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="product-img">
+                    <img src="https://images.unsplash.com/photo-1542272604-787c3835535d?q=80&w=800&auto=format&fit=crop" alt="Jeans">
+                </div>
+                <div class="product-info">
+                    <h4>Raw Selvedge Denim</h4>
+                    <p class="price">₹3,999</p>
+                    <a href="https://wa.me/917375093262?text=I'd like to order the Raw Denim" class="btn btn-gold" style="width: 100%; display: block; text-align: center; margin-top: 15px; padding: 12px;">Order on WhatsApp</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="reviews">
+        <h2 style="font-family: 'Syncopate'; margin-bottom: 40px; color: var(--muted-gold);">CUSTOMER STORIES</h2>
+        <div class="review-slider">
+            <div class="review-card">
+                <div class="stars">★★★★★</div>
+                <p>"Quality is excellent, trusted shop in Sangaria. Been buying for 2 years now."</p>
+                <h5 style="margin-top: 20px;">— Rakesh Kumar, Sangaria</h5>
+            </div>
+            <div class="review-card">
+                <div class="stars">★★★★★</div>
+                <p>"Fast response on WhatsApp. No COD was a worry but delivery was prompt."</p>
+                <h5 style="margin-top: 20px;">— Sameer V., Hanumangarh</h5>
+            </div>
+            <div class="review-card">
+                <div class="stars">★★★★★</div>
+                <p>"Premium fabric and perfect fitting. Best retail shop at Rishi Aashram Chowk."</p>
+                <h5 style="margin-top: 20px;">— Amit S., Sangaria</h5>
+            </div>
+        </div>
+    </section>
+
+    <section style="padding: 100px 5%;">
+        <div class="footer-grid" style="border: none;">
+            <div>
+                <h3 style="font-family: 'Syncopate'; margin-bottom: 20px;">VISIT OUR STORE</h3>
+                <p>Rishi Aashram Chowk,<br>Sangaria, Rajasthan - 335063</p>
+                <br>
+                <p><strong>Enquiry:</strong> 9023992824, 8306793067</p>
+                <p><strong>Order:</strong> 7375093262</p>
+            </div>
+            <div style="height: 300px; background: #eee;">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3460.5!2d74.4!3d29.8!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjnCsDQ4JzAwLjAiTiA3NMKwMjQnMDAuMCJF!5e0!3m2!1sen!2sin!4v123456789" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div>
+                <span class="footer-logo">GAGAN GARMENTS</span>
+                <p>Elevating Rajasthani fashion with premium global standards.</p>
+            </div>
+            <div>
+                <h4>FOLLOW US</h4>
+                <a href="https://instagram.com/gagangarments" style="color: var(--muted-gold); text-decoration: none; font-size: 1.5rem;"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 40px; font-size: 0.8rem; opacity: 0.5;">
+            &copy; 2026 Gagan Garments. No COD | WhatsApp Ordering Only.
+        </div>
+    </footer>
+
+    <a href="https://wa.me/917375093262" class="wa-float">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 1000, once: true });
+
+        // Navbar Scroll effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 100) nav.classList.add('scrolled');
+            else nav.classList.remove('scrolled');
+        });
+
+        // Menu Toggle
+        function toggleMenu() {
+            const menu = document.getElementById('categoryMenu');
+            if (menu.style.display === 'flex') {
+                menu.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            } else {
+                menu.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+    </script>
+</body>
+</html>
